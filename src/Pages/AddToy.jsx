@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, TextInput } from "flowbite-react";
 import { AuthProvider } from "../Auth/AuthContext";
-
+import {Helmet} from "react-helmet";
 const AddToy = () => {
   const { user } = useContext(AuthProvider);
   const {
@@ -27,6 +27,11 @@ const AddToy = () => {
   };
   return (
     <div>
+      <div>
+        <Helmet>
+          <title> THis is  Add Toy page </title>
+        </Helmet>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <div className="grid gap-6 mb-6 md:grid-cols-2">
           <div>

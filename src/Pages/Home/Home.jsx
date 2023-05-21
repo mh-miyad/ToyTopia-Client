@@ -5,6 +5,7 @@ import TabsComp from '../../Components/Tabs/TabsComp'
 import CardComp from '../../Components/card/CardComp'
 import { Button } from 'flowbite-react'
 import AOS from 'aos';
+import {Helmet} from "react-helmet";
 import 'aos/dist/aos.css';
 import GalarySec from '../../Components/GalarySec'
 import HeaderMain from '../../Components/HeaderMain'
@@ -30,6 +31,12 @@ const Home = () => {
 
   return (
     <div>
+
+      <div> 
+        <Helmet>
+          <title> This Is Home page </title>
+        </Helmet>
+      </div>
       <div className='space-y-9'   data-aos="fade-up" 
    
  >

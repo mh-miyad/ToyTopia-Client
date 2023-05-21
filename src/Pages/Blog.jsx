@@ -1,8 +1,11 @@
 import React from "react";
-
+import {Helmet} from "react-helmet";
 const Blog = () => {
   return (
     <div>
+      <Helmet>
+        <title> This IS blog Page </title>
+      </Helmet>
       <div className="flex flex-col  gap-10  text-center md:text-start ">
         <div>
           <span className=" text-sm sm:text-lg md:text-xl lg:text-2xl font-bold ">

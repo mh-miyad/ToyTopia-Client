@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider } from '../../Auth/AuthContext'
 import { toast } from 'react-toastify'
 
-
+import {Helmet} from "react-helmet";
 const LogIng = () => {
   
  
@@ -66,6 +66,9 @@ setPassword("")
 }
   return (
     <div>
+      <Helmet>
+    <title> This Is Log-in Page </title>
+      </Helmet>
       <div>
 
 <div className=''>

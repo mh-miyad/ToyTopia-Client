@@ -2,26 +2,27 @@ import { Button, Label, Modal, Table, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
-
-const TableRow = ({ data, deleteData, user }) => {
+// import 'sweetalert2/src/sweetalert2.scss'
+import { useForm } from "react-hook-form";
+const TableRow = ({ data, user }) => {
   const { _id, name, sellerName, subcategory, price, quantity } = data;
 
   const [show, setShow] = useState(false);
-  const [price1 ,setPrice] = useState(null);
-  const [quantity1 ,setQuantity] = useState(null);
-  const [details1 ,setDetails] = useState(null);
-  const [id,setid] = useState(null);
 
-  const updateForm = (event)=>{
-    event.preventDefault();
-     const newItems ={ price1, quantity1, details1};
-     console.log(id,newItems);
-     fetch(`http://localhost:5000/mytoyupdate/${id}`, {
+  const [id, setid] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    fetch(`https://b7a11-toy-marketplace-server-side-mh-miyad.vercel.app/mytoyupdate/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newItems),
+      body: JSON.stringify(data),
     })
       .then((res) => res.json())
       .then((resData) => {
@@ -32,17 +33,42 @@ const TableRow = ({ data, deleteData, user }) => {
             icon: "success",
             confirmButtonText: "Cool",
           });
-
-          form.reset();
         }
       });
-
-  }
-
+  };
+  const deleteData = (id) => {
+    Swal.fire({
+       title: "Are you sure?",
+       text: "You won't be able to revert this!",
+       icon: "warning",
+       showCancelButton: true,
+       confirmButtonColor: "#3085d6",
+       cancelButtonColor: "#d33",
+       confirmButtonText: "Yes, delete it!",
+     }).then((result) => {
+       if (result.isConfirmed) {
+         fetch(
+           `https://b7a11-toy-marketplace-server-side-mh-miyad.vercel.app/allmytoy/${id}`,
+           {
+             method: "DELETE",
+           }
+         )
+           .then((res) => res.json())
+           .then((data) => {
+             console.log(data);
+             if (data.deletedCount > 0) {
+               const remaining = data.filter((booking) => booking._id !== id);
+               setData(remaining);
+             }
+           });
+         Swal.fire("Deleted!", "Your file has been deleted.", "success");
+       }
+     });
+   };
   const onClick = () => {
     setShow(true);
   };
-  
+
   const onClose = () => {
     setShow(false);
   };
@@ -57,27 +83,72 @@ const TableRow = ({ data, deleteData, user }) => {
       <Table.Cell>{subcategory}</Table.Cell>
       <Table.Cell>${price}</Table.Cell>
       <Table.Cell>{quantity}piece </Table.Cell>
-      <Table.Cell> <Modal
-    show={show}
-    onClose={onClose}
-  >
-    <Modal.Header>
-     You Can Update Your Toys Information 
-    </Modal.Header>
-    <Modal.Body>
-      <form   onSubmit={updateForm}>
-      <input className="my-5 w-full block p-2 rounded-lg border-2 border-blue-300 " placeholder=" Update Price" type="text" name="price" id="price" onChange={(e)=> setPrice(e.target.value) } />
-      <input className="my-5 w-full block p-2 rounded-lg border-2 border-blue-300 " placeholder=" Update Available Stoke" type="text" name="quantity" id="quantity" onChange={(e)=> setQuantity(e.target.value) } />
-      <input className="my-5 w-full block p-2 rounded-lg border-2 border-blue-300 " placeholder=" Update Description " type="text" name="details" id="details" onChange={(e)=> setDetails(e.target.value) } />
+      <Table.Cell>
+        {" "}
+        <Modal show={show} onClose={onClose}>
+          <Modal.Header>You Can Update Your Toys Information</Modal.Header>
+          <Modal.Body>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
+             <div>
+            <label
+              for="price"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Price{" "}
+            </label>
+            <input
+              type="number"
+              {...register("price", { required: true })}
+              id="price"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="price"
+            />
+          </div>
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Quantity
+            </label>
+            <input
+              {...register("quantity", { required: true })}
+              id="quantity"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Available Stock"
+            />
+          </div>
+          <div className="mb-6">
+          <label
+            for="url"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Description{" "}
+          </label>
+          <TextInput {...register("details", { required: true })} />
+        </div>
 
-      <button type="submit" className="px-5 py-2 bg-blue-600 rounded-xl text-white" onClick={()=>setid(_id)} > Update</button>
- 
-      </form>
-    </Modal.Body>
-    <Modal.Footer>
-     <button  className="px-5 py-2 bg-indigo-700 rounded-xl text-white"  onClick={onClose}> Close </button>
-    </Modal.Footer>
-  </Modal></Table.Cell>
+              <button
+                type="submit"
+                className="px-5 py-2 bg-blue-600 rounded-xl text-white"
+                onClick={() => setid(_id)}
+              >
+                {" "}
+                Update
+              </button>
+            </form>
+          </Modal.Body>
+          <Modal.Footer>
+            <button
+              className="px-5 py-2 bg-indigo-700 rounded-xl text-white"
+              onClick={onClose}
+            >
+              {" "}
+              Close{" "}
+            </button>
+          </Modal.Footer>
+        </Modal>
+      </Table.Cell>
       <Table.Cell>
         <div className="flex gap-3">
           {!user?.email ? (

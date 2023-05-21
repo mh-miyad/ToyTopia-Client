@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Logo from '../../assets/logo.png'
 import { AuthProvider } from "../../Auth/AuthContext";
-
+import {Helmet} from "react-helmet";
 const Register = () => {
 
   const { createUser, updateUser } = useContext(AuthProvider)
@@ -47,6 +47,9 @@ const Register = () => {
 
   return (
     <div>
+      <div> <Helmet>
+        <title> This Register Page </title>
+        </Helmet></div>
       <div>
         <div className="flex flex-col items-center min-h-screen pt-6 sm:justify-center sm:pt-0 bg-gray-50">
           <div className="border p-3 rounded-xl shadow-lg">

@@ -13,35 +13,35 @@ const TableCom = () => {
       .then((res) => res.json())
       .then((resData) => setData(resData));
   }, []);
-  const deleteData = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(
-          `https://b7a11-toy-marketplace-server-side-mh-miyad.vercel.app/allmytoy/${id}`,
-          {
-            method: "DELETE",
-          }
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            if (data.deletedCount > 0) {
-              const remaining = data.filter((booking) => booking._id !== id);
-              setData(remaining);
-            }
-          });
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
-      }
-    });
-  };
+  // const deleteData = (id) => {
+  //  Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, delete it!",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       fetch(
+  //         `https://b7a11-toy-marketplace-server-side-mh-miyad.vercel.app/allmytoy/${id}`,
+  //         {
+  //           method: "DELETE",
+  //         }
+  //       )
+  //         .then((res) => res.json())
+  //         .then((data) => {
+  //           console.log(data);
+  //           if (data.deletedCount > 0) {
+  //             const remaining = data.filter((booking) => booking._id !== id);
+  //             setData(remaining);
+  //           }
+  //         });
+  //       Swal.fire("Deleted!", "Your file has been deleted.", "success");
+  //     }
+  //   });
+  // };
   const [searchText, setSearchText] = useState(null);
   const handlerSubmit = () => {
     fetch(
@@ -106,7 +106,7 @@ const TableCom = () => {
         </Table.Head>
         <Table.Body className="divide-y">
           {data.slice(0, !showHide ? 10 : 1000).map((ele) => (
-            <TableRow key={ele._id} data={ele} deleteData={deleteData}  />
+            <TableRow key={ele._id} data={ele}  />
           ))}
           {!showHide ? (
             <Button onClick={() => setShowHide(true)} className="mx-auto my-5">

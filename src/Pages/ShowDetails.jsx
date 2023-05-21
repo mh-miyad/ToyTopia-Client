@@ -2,7 +2,7 @@ import React from "react";
 
 import { Button, Rating } from "flowbite-react";
 import { Link, useLoaderData } from "react-router-dom";
-
+import {Helmet} from "react-helmet";
 const ShowDetails = () => {
   const data = useLoaderData();
 
@@ -12,6 +12,11 @@ const ShowDetails = () => {
   return (
     <>
       <div>
+        <div>
+          <Helmet>
+            <title> This is Show details page  </title>
+          </Helmet>
+        </div>
         <div>
           <img src={image} alt="" className="mx-auto  h-72" />
         </div>

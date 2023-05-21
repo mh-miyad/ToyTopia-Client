@@ -4,7 +4,7 @@ import { Button, Table } from "flowbite-react";
 import TableRow from "../Components/table/TableRow";
 import Swal from "sweetalert2";
 import { AuthProvider } from "../Auth/AuthContext";
-
+import {Helmet} from "react-helmet";
 const MyAddedToy = () => {
   
   const { user } = useContext(AuthProvider);
@@ -54,6 +54,11 @@ const MyAddedToy = () => {
  
   return (
     <div>
+      <div>
+        <Helmet>
+          <title> This is My Added Toy page </title>
+        </Helmet>
+      </div>
       <div>
        
         <Table hoverable={true}>
